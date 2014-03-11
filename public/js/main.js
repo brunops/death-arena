@@ -23,7 +23,7 @@
     this.lastFrameUpdate = 0;
   };
 
-  Player.width = 34;
+  Player.width = 30;
   Player.height = 52;
 
   Player.spritePositions = {
