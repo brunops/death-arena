@@ -6,6 +6,32 @@
       Entity.call(this, options);
     }
 
+    // Constructor properties
+    // shared among all instances
+    NewEntity.width = options.width || 32;
+    NewEntity.height = options.height || 32;
+
+    NewEntity.renderedWidth = options.renderedWidth ||
+                                     NewEntity.width;
+
+    NewEntity.renderedHeight = options.renderedHeight ||
+                                      NewEntity.height;
+
+    NewEntity.spritePositions = options.spritePositions ||
+                                       NewEntity.spritePositions ||
+                                       {
+                                         'down': [[0, 0]],
+                                         'left': [[0, 0]],
+                                         'right': [[0, 0]],
+                                         'up': [[0, 0]]
+                                       };
+
+    NewEntity.frameCooldown = options.frameCooldown ||
+                                     NewEntity.frameCooldown ||
+                                     150;
+
+    NewEntity.totalFrames = NewEntity.spritePositions.right[0].length;
+
     NewEntity.prototype = new Entity();
     NewEntity.prototype.constructor = NewEntity;
 
@@ -18,32 +44,6 @@
 
   Entity.prototype.init = function (options) {
     options = options || {};
-
-    // Constructor properties
-    // shared among all instances
-    this.constructor.width = options.width || 32;
-    this.constructor.height = options.height || 32;
-
-    this.constructor.renderedWidth = options.renderedWidth ||
-                                     this.constructor.width;
-
-    this.constructor.renderedHeight = options.renderedHeight ||
-                                      this.constructor.height;
-
-    this.constructor.spritePositions = options.spritePositions ||
-                                       this.constructor.spritePositions ||
-                                       {
-                                         'down': [[0, 0]],
-                                         'left': [[0, 0]],
-                                         'right': [[0, 0]],
-                                         'up': [[0, 0]]
-                                       };
-
-    this.constructor.frameCooldown = options.frameCooldown ||
-                                     this.constructor.frameCooldown ||
-                                     150;
-
-    this.constructor.totalFrames = this.constructor.spritePositions.right[0].length;
 
     // Object exclusive Properties
     this.x = options.x || 0;
