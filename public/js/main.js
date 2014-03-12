@@ -1,13 +1,23 @@
-/* global Entity */
+/* global entityCreator */
 (function () {
   'use strict';
 
-  function Player(options) {
-    Entity.call(this, options);
-  }
-
-  Player.prototype = new Entity();
-  Player.prototype.constructor = Player;
+  var Player = entityCreator({
+    x: 50,
+    y: 50,
+    width: 30,
+    height: 52,
+    speed: 200,
+    frameCooldown: 150,
+    spriteSrc: 'public/images/heroes.png',
+    spritePositions: {
+      'down':  [[10, 12], [57, 12],  [105, 12], [57, 12]],
+      'left':  [[10, 75], [57, 75],  [105, 75], [57, 75]],
+      'right': [[10, 140], [57, 140], [105, 140], [57, 140]],
+      'up':    [[10, 205], [57, 205], [105, 205], [57, 205]]
+    },
+    direction: 'down'
+  });
 
   window.Player = Player;
 }());
@@ -26,20 +36,8 @@ window.requestAnimFrame = (function () {
   'use strict';
 
   var player = new window.Player({
-    x: 50,
-    y: 50,
-    width: 30,
-    height: 52,
-    speed: 200,
-    frameCooldown: 150,
-    spriteSrc: 'public/images/heroes.png',
-    spritePositions: {
-      'down':  [[10, 12], [57, 12],  [105, 12], [57, 12]],
-      'left':  [[10, 75], [57, 75],  [105, 75], [57, 75]],
-      'right': [[10, 140], [57, 140], [105, 140], [57, 140]],
-      'up':    [[10, 205], [57, 205], [105, 205], [57, 205]]
-    },
-    direction: 'down'
+    x: 100,
+    y: 200
   });
 
   function updateScene(modifier) {
