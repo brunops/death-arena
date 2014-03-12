@@ -42,8 +42,6 @@ window.requestAnimFrame = (function () {
     direction: 'down'
   });
 
-  console.log(player);
-
   function updateScene(modifier) {
     var dirChanged = false;
 
