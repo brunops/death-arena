@@ -6,23 +6,23 @@
   }
 
   Entity.extend = function (options) {
-    function NewEntity() {
+    function Surrogate() {
       Entity.call(this, options);
     }
 
     // Constructor properties
     // shared among all instances
-    NewEntity.width = options.width || 32;
-    NewEntity.height = options.height || 32;
+    Surrogate.width = options.width || 32;
+    Surrogate.height = options.height || 32;
 
-    NewEntity.renderedWidth = options.renderedWidth ||
-                              NewEntity.width;
+    Surrogate.renderedWidth = options.renderedWidth ||
+                              Surrogate.width;
 
-    NewEntity.renderedHeight = options.renderedHeight ||
-                               NewEntity.height;
+    Surrogate.renderedHeight = options.renderedHeight ||
+                               Surrogate.height;
 
-    NewEntity.spritePositions = options.spritePositions ||
-                                NewEntity.spritePositions ||
+    Surrogate.spritePositions = options.spritePositions ||
+                                Surrogate.spritePositions ||
                                 {
                                   'down': [[0, 0]],
                                   'left': [[0, 0]],
@@ -30,16 +30,16 @@
                                   'up': [[0, 0]]
                                 };
 
-    NewEntity.frameCooldown = options.frameCooldown ||
-                              NewEntity.frameCooldown ||
+    Surrogate.frameCooldown = options.frameCooldown ||
+                              Surrogate.frameCooldown ||
                               150;
 
-    NewEntity.totalFrames = NewEntity.spritePositions.right[0].length;
+    Surrogate.totalFrames = Surrogate.spritePositions.right[0].length;
 
-    NewEntity.prototype = new Entity();
-    NewEntity.prototype.constructor = NewEntity;
+    Surrogate.prototype = new Entity();
+    Surrogate.prototype.constructor = Surrogate;
 
-    return NewEntity;
+    return Surrogate;
   };
 
   Entity.prototype.init = function (options) {
