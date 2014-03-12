@@ -16,23 +16,23 @@
     NewEntity.height = options.height || 32;
 
     NewEntity.renderedWidth = options.renderedWidth ||
-                                     NewEntity.width;
+                              NewEntity.width;
 
     NewEntity.renderedHeight = options.renderedHeight ||
-                                      NewEntity.height;
+                               NewEntity.height;
 
     NewEntity.spritePositions = options.spritePositions ||
-                                       NewEntity.spritePositions ||
-                                       {
-                                         'down': [[0, 0]],
-                                         'left': [[0, 0]],
-                                         'right': [[0, 0]],
-                                         'up': [[0, 0]]
-                                       };
+                                NewEntity.spritePositions ||
+                                {
+                                  'down': [[0, 0]],
+                                  'left': [[0, 0]],
+                                  'right': [[0, 0]],
+                                  'up': [[0, 0]]
+                                };
 
     NewEntity.frameCooldown = options.frameCooldown ||
-                                     NewEntity.frameCooldown ||
-                                     150;
+                              NewEntity.frameCooldown ||
+                              150;
 
     NewEntity.totalFrames = NewEntity.spritePositions.right[0].length;
 
