@@ -1,8 +1,8 @@
-/* global entityCreator */
+/* global Entity */
 (function () {
   'use strict';
 
-  var Player = entityCreator({
+  var Player = Entity.extend({
     x: 50,
     y: 50,
     width: 30,

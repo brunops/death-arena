@@ -1,7 +1,11 @@
 (function () {
   'use strict';
 
-  function entityCreator(options) {
+  function Entity(options) {
+    this.init(options);
+  }
+
+  Entity.extend = function (options) {
     function NewEntity() {
       Entity.call(this, options);
     }
@@ -36,11 +40,7 @@
     NewEntity.prototype.constructor = NewEntity;
 
     return NewEntity;
-  }
-
-  function Entity(options) {
-    this.init(options);
-  }
+  };
 
   Entity.prototype.init = function (options) {
     options = options || {};
@@ -104,5 +104,5 @@
     }
   };
 
-  window.entityCreator = entityCreator;
+  window.Entity = Entity;
 }());
