@@ -12,7 +12,7 @@ window.requestAnimFrame = (function () {
 (function () {
   'use strict';
 
-  var player = new window.Player({
+  var player = new Player({
     x: 100,
     y: 200
   });
