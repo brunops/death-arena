@@ -19,8 +19,8 @@
 
   Projectile.prototype.render = function (ctx) {
     ctx.save();
-      var x = this.x + Projectile.width / 2,
-          y = this.y + Projectile.height / 2;
+      var x = this.x + Projectile.renderedWidth / 2,
+          y = this.y + Projectile.renderedHeight / 2;
 
       ctx.translate(x, y);
       ctx.rotate(Projectile.TO_RADIANS * Projectile.directionAngles[this.direction]);
