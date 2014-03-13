@@ -65,10 +65,11 @@ window.requestAnimFrame = (function () {
 
       // SPACE
       if (keysDown[32]) {
+        // Centralize fireball in respect to player
         projectiles.push(new Projectile({
           direction: player.direction,
-          x: player.x,
-          y: player.y
+          x: player.x + (Player.renderedWidth / 2 - Projectile.renderedWidth / 2),
+          y: player.y + (Player.renderedHeight / 2 - Projectile.renderedHeight / 2)
         }));
       }
 
