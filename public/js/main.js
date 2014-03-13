@@ -1,4 +1,4 @@
-/* global Player */
+/* global Player, Projectile */
 window.requestAnimFrame = (function () {
   'use strict';
   return window.requestAnimationFrame       ||
@@ -15,6 +15,11 @@ window.requestAnimFrame = (function () {
   var player = new Player({
     x: 100,
     y: 200
+  });
+
+  var projectile = new Projectile({
+    x: 300,
+    y: 300
   });
 
   function updateScene(modifier) {
@@ -76,6 +81,8 @@ window.requestAnimFrame = (function () {
     updateScene(modifier);
     ctx.clearRect(0, 0, 512, 480);
     player.render(ctx);
+
+    projectile.render(ctx);
 
     before = now;
     window.requestAnimFrame(update);
