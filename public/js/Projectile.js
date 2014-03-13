@@ -13,9 +13,9 @@
 
   Projectile.directionAngles = {
     'left': 0,
-    'top': 90,
+    'up': 90,
     'right': 180,
-    'bottom': 270
+    'down': 270
   };
   Projectile.TO_RADIANS = Math.PI / 180;
 
