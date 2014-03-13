@@ -96,7 +96,11 @@ window.requestAnimFrame = (function () {
     }
   }
 
-  var ctx = document.getElementById('canvas').getContext('2d');
+  var canvas = document.getElementById('canvas'),
+      ctx = canvas.getContext('2d');
+
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
 
   var before = Date.now();
   window.requestAnimFrame(function update() {
@@ -105,7 +109,7 @@ window.requestAnimFrame = (function () {
         modifier = delta / 1000;
 
     updateScene(modifier);
-    ctx.clearRect(0, 0, 512, 480);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (var i = 0; i < projectiles.length; ++i) {
       projectiles[i].render(ctx);
