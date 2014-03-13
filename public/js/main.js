@@ -65,8 +65,9 @@ window.requestAnimFrame = (function () {
 
         player.x = player.x - (player.speed * modifier);
       }
-      if (dirChanged)
+      if (dirChanged) {
         player.update();
+      }
     }
   }
 
