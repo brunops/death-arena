@@ -17,10 +17,7 @@ window.requestAnimFrame = (function () {
     y: 200
   });
 
-  var projectile = new Projectile({
-    x: 300,
-    y: 300
-  });
+  var projectiles = [];
 
   function updateScene(modifier) {
     var dirChanged = false;
@@ -65,8 +62,35 @@ window.requestAnimFrame = (function () {
 
         player.x = player.x - (player.speed * modifier);
       }
+
+      // SPACE
+      if (keysDown[32]) {
+        projectiles.push(new Projectile({
+          direction: player.direction,
+          x: player.x,
+          y: player.y
+        }));
+      }
+
       if (dirChanged) {
         player.update();
+      }
+
+      for (var i = 0; i < projectiles.length; ++i) {
+        switch (projectiles[i].direction) {
+          case 'up':
+            projectiles[i].y -= projectiles[i].speed * modifier;
+            break;
+          case 'down':
+            projectiles[i].y += projectiles[i].speed * modifier;
+            break;
+          case 'right':
+            projectiles[i].x += projectiles[i].speed * modifier;
+            break;
+          case 'left':
+            projectiles[i].x -= projectiles[i].speed * modifier;
+            break;
+        }
       }
     }
   }
@@ -81,9 +105,11 @@ window.requestAnimFrame = (function () {
 
     updateScene(modifier);
     ctx.clearRect(0, 0, 512, 480);
-    player.render(ctx);
 
-    projectile.render(ctx);
+    for (var i = 0; i < projectiles.length; ++i) {
+      projectiles[i].render(ctx);
+    }
+    player.render(ctx);
 
     before = now;
     window.requestAnimFrame(update);
