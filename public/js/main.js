@@ -1,4 +1,4 @@
-/* global Player */
+/* global Player, Projectile */
 window.requestAnimFrame = (function () {
   'use strict';
   return window.requestAnimationFrame       ||
@@ -16,6 +16,8 @@ window.requestAnimFrame = (function () {
     x: 100,
     y: 200
   });
+
+  var projectiles = [];
 
   function updateScene(modifier) {
     var dirChanged = false;
@@ -60,8 +62,37 @@ window.requestAnimFrame = (function () {
 
         player.x = player.x - (player.speed * modifier);
       }
-      if (dirChanged)
+
+      // SPACE
+      if (keysDown[32]) {
+        // Centralize fireball in respect to player
+        projectiles.push(new Projectile({
+          direction: player.direction,
+          x: player.x + (Player.renderedWidth / 2 - Projectile.renderedWidth / 2),
+          y: player.y + (Player.renderedHeight / 2 - Projectile.renderedHeight / 2)
+        }));
+      }
+
+      if (dirChanged) {
         player.update();
+      }
+
+      for (var i = 0; i < projectiles.length; ++i) {
+        switch (projectiles[i].direction) {
+          case 'up':
+            projectiles[i].y -= projectiles[i].speed * modifier;
+            break;
+          case 'down':
+            projectiles[i].y += projectiles[i].speed * modifier;
+            break;
+          case 'right':
+            projectiles[i].x += projectiles[i].speed * modifier;
+            break;
+          case 'left':
+            projectiles[i].x -= projectiles[i].speed * modifier;
+            break;
+        }
+      }
     }
   }
 
@@ -75,6 +106,10 @@ window.requestAnimFrame = (function () {
 
     updateScene(modifier);
     ctx.clearRect(0, 0, 512, 480);
+
+    for (var i = 0; i < projectiles.length; ++i) {
+      projectiles[i].render(ctx);
+    }
     player.render(ctx);
 
     before = now;

@@ -6,8 +6,9 @@
   }
 
   Entity.extend = function (options) {
+
     function Surrogate() {
-      Entity.call(this, options);
+      Entity.apply(this, arguments);
     }
 
     // Constructor properties
@@ -34,7 +35,19 @@
                               Surrogate.frameCooldown ||
                               150;
 
-    Surrogate.totalFrames = Surrogate.spritePositions.right[0].length;
+    Surrogate.totalFrames = Surrogate.spritePositions.right.length || 0;
+
+    Surrogate.speed = options.speed || 100;
+
+    if (options.spriteSrc) {
+      Surrogate.spriteLoaded = false;
+      Surrogate.sprite = new Image();
+      Surrogate.sprite.src = options.spriteSrc;
+
+      Surrogate.sprite.onload = function () {
+        Surrogate.spriteLoaded = true;
+      };
+    }
 
     Surrogate.prototype = new Entity();
     Surrogate.prototype.constructor = Surrogate;
@@ -53,27 +66,7 @@
     this.direction = options.direction || 'right';
     this.currentFrame = options.currentFrame || 0;
     this.lastFrameUpdate = Date.now();
-    this.speed = options.speed || 100;
-
-    if (options.spriteSrc) {
-      this.loadSprite(options.spriteSrc);
-    }
-  };
-
-  Entity.prototype.loadSprite = function (spriteSrc) {
-    if (this.constructor.spriteLoaded) {
-      return;
-    }
-
-    var self = this;
-
-    this.constructor.spriteLoaded = false;
-    this.constructor.sprite = new Image();
-    this.constructor.sprite.src = spriteSrc;
-
-    this.constructor.sprite.onload = function () {
-      self.constructor.spriteLoaded = true;
-    };
+    this.speed = options.speed || this.constructor.speed || 100;
   };
 
   Entity.prototype.render = function (context) {
