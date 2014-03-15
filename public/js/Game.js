@@ -84,7 +84,10 @@
           dirChanged = true;
         }
 
-        player.y = player.y - (player.speed * modifier);
+        // Prevent player form going out of bounds
+        if (player.y > 0) {
+          player.y = player.y - (player.speed * modifier);
+        }
       }
 
       // DOWN
@@ -94,7 +97,10 @@
           dirChanged = true;
         }
 
-        player.y = player.y + (player.speed * modifier);
+        // Prevent player form going out of bounds
+        if (player.y < Game.canvas.height - Player.height) {
+          player.y = player.y + (player.speed * modifier);
+        }
       }
 
       // RIGHT
@@ -104,7 +110,10 @@
           dirChanged = true;
         }
 
-        player.x = player.x + (player.speed * modifier);
+        // Prevent player form going out of bounds
+        if (player.x < Game.canvas.width - Player.width) {
+          player.x = player.x + (player.speed * modifier);
+        }
       }
 
       // LEFT
@@ -114,7 +123,10 @@
           dirChanged = true;
         }
 
-        player.x = player.x - (player.speed * modifier);
+        // Prevent player form going out of bounds
+        if (player.x > 0) {
+          player.x = player.x - (player.speed * modifier);
+        }
       }
 
       // SPACE
