@@ -131,7 +131,6 @@
 
       // SPACE
       if (Game.keysDown[Game.keyCodes.SPACE]) {
-
         if (Game.projectileCooldown < now - Game.lastShot) {
           Game.lastShot = now;
 
@@ -142,8 +141,6 @@
             y: player.y + (Player.renderedHeight / 2 - Projectile.renderedHeight / 2)
           }));
         }
-
-
       }
 
       if (dirChanged) {
