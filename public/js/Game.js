@@ -9,8 +9,11 @@
     // store all projectiles
     projectiles: [],
 
+    // Store timestamp with player last shot
+    lastShot: 0,
+
     // Cooldown between Player shots in ms
-    projectileCooldown: 150,
+    projectileCooldown: 500,
 
     init: function () {
       Game.player = new Player({
@@ -48,7 +51,8 @@
 
     handleInput: function (modifier) {
       var dirChanged = false,
-          player = Game.player;
+          player = Game.player,
+          now = Date.now();
 
       if (modifier > 1000) {
         return;
@@ -96,12 +100,19 @@
 
       // SPACE
       if (Game.keysDown[32]) {
+
+        if (Game.projectileCooldown > now - Game.lastShot) {
+          return;
+        }
+
         // Centralize fireball in respect to player
         Game.projectiles.push(new Projectile({
           direction: player.direction,
           x: player.x + (Player.renderedWidth / 2 - Projectile.renderedWidth / 2),
           y: player.y + (Player.renderedHeight / 2 - Projectile.renderedHeight / 2)
         }));
+
+        Game.lastShot = now;
       }
 
       if (dirChanged) {
