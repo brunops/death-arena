@@ -7,7 +7,7 @@
     y: 50,
     width: 30,
     height: 52,
-    speed: 200,
+    speed: 150,
     frameCooldown: 150,
     spriteSrc: 'public/images/heroes.png',
     spritePositions: {
