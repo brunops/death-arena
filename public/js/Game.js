@@ -115,18 +115,18 @@
       // SPACE
       if (Game.keysDown[Game.keyCodes.SPACE]) {
 
-        if (Game.projectileCooldown > now - Game.lastShot) {
-          return;
+        if (Game.projectileCooldown < now - Game.lastShot) {
+          Game.lastShot = now;
+
+          // Centralize fireball in respect to player
+          Game.projectiles.push(new Projectile({
+            direction: player.direction,
+            x: player.x + (Player.renderedWidth / 2 - Projectile.renderedWidth / 2),
+            y: player.y + (Player.renderedHeight / 2 - Projectile.renderedHeight / 2)
+          }));
         }
 
-        // Centralize fireball in respect to player
-        Game.projectiles.push(new Projectile({
-          direction: player.direction,
-          x: player.x + (Player.renderedWidth / 2 - Projectile.renderedWidth / 2),
-          y: player.y + (Player.renderedHeight / 2 - Projectile.renderedHeight / 2)
-        }));
 
-        Game.lastShot = now;
       }
 
       if (dirChanged) {
