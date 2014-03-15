@@ -69,7 +69,7 @@
     },
 
     handleInput: function (modifier) {
-      var dirChanged = false,
+      var isMoving = false,
           player = Game.player,
           now = Date.now();
 
@@ -79,9 +79,9 @@
 
       // UP
       if (Game.keysDown[Game.keyCodes.UP]) {
-        if (!dirChanged) {
+        if (!isMoving) {
           player.direction = 'up';
-          dirChanged = true;
+          isMoving = true;
         }
 
         // Prevent player form going out of bounds
@@ -92,9 +92,9 @@
 
       // DOWN
       if (Game.keysDown[Game.keyCodes.DOWN]) {
-        if (!dirChanged) {
+        if (!isMoving) {
           player.direction = 'down';
-          dirChanged = true;
+          isMoving = true;
         }
 
         // Prevent player form going out of bounds
@@ -105,9 +105,9 @@
 
       // RIGHT
       if (Game.keysDown[Game.keyCodes.RIGHT]) {
-        if (!dirChanged) {
+        if (!isMoving) {
           player.direction = 'right';
-          dirChanged = true;
+          isMoving = true;
         }
 
         // Prevent player form going out of bounds
@@ -118,9 +118,9 @@
 
       // LEFT
       if (Game.keysDown[Game.keyCodes.LEFT]) {
-        if (!dirChanged) {
+        if (!isMoving) {
           player.direction = 'left';
-          dirChanged = true;
+          isMoving = true;
         }
 
         // Prevent player form going out of bounds
@@ -143,7 +143,7 @@
         }
       }
 
-      if (dirChanged) {
+      if (isMoving) {
         player.update();
       }
     },
