@@ -44,7 +44,12 @@
 
     bind: function () {
       document.addEventListener('keydown', function (e) {
-        Game.keysDown = {};
+        // Force player to move at only one direction
+        // no diagonals allowed
+        if (Game.isDirectionKey(e.keyCode)) {
+          Game.resetPressedDirectionalKeys();
+        }
+
         Game.keysDown[e.keyCode] = true;
       }, false);
 
@@ -127,6 +132,20 @@
       if (dirChanged) {
         player.update();
       }
+    },
+
+    isDirectionKey: function (keyCode) {
+      return keyCode === Game.keyCodes.UP ||
+             keyCode === Game.keyCodes.DOWN ||
+             keyCode === Game.keyCodes.LEFT ||
+             keyCode === Game.keyCodes.RIGHT;
+    },
+
+    resetPressedDirectionalKeys: function () {
+      delete Game.keysDown[Game.keyCodes.UP];
+      delete Game.keysDown[Game.keyCodes.DOWN];
+      delete Game.keysDown[Game.keyCodes.LEFT];
+      delete Game.keysDown[Game.keyCodes.RIGHT];
     },
 
     updateProjectiles: function (modifier) {
