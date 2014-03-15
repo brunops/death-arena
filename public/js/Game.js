@@ -56,6 +56,11 @@
       document.addEventListener('keyup', function (e) {
         delete Game.keysDown[e.keyCode];
       }, false);
+
+      // Prevent keys from staying pressed when window loses focus
+      window.addEventListener('blur', function () {
+        Game.keysDown = {};
+      }, false);
     },
 
     update: function (modifier) {
