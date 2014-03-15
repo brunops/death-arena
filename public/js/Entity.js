@@ -85,7 +85,7 @@
     }
   };
 
-  Entity.prototype.update = function (now) {
+  Entity.prototype.updateSprite = function (now) {
     now = now || Date.now();
 
     if (now - this.lastFrameUpdate > this.constructor.frameCooldown) {

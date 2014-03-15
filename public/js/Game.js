@@ -144,7 +144,7 @@
       }
 
       if (isMoving) {
-        player.update();
+        player.updateSprite();
       }
     },
 
