@@ -3,6 +3,15 @@
   'use strict';
 
   var Game = {
+    // Key codes lookup
+    keyCodes: {
+      LEFT: 37,
+      UP: 38,
+      RIGHT: 39,
+      DOWN: 40,
+      SPACE: 32
+    },
+
     // current keyboard state
     keysDown: {},
 
@@ -59,7 +68,7 @@
       }
 
       // UP
-      if (Game.keysDown[38]) {
+      if (Game.keysDown[Game.keyCodes.UP]) {
         if (!dirChanged) {
           player.direction = 'up';
           dirChanged = true;
@@ -69,7 +78,7 @@
       }
 
       // DOWN
-      if (Game.keysDown[40]) {
+      if (Game.keysDown[Game.keyCodes.DOWN]) {
         if (!dirChanged) {
           player.direction = 'down';
           dirChanged = true;
@@ -79,7 +88,7 @@
       }
 
       // RIGHT
-      if (Game.keysDown[39]) {
+      if (Game.keysDown[Game.keyCodes.RIGHT]) {
         if (!dirChanged) {
           player.direction = 'right';
           dirChanged = true;
@@ -89,7 +98,7 @@
       }
 
       // LEFT
-      if (Game.keysDown[37]) {
+      if (Game.keysDown[Game.keyCodes.LEFT]) {
         if (!dirChanged) {
           player.direction = 'left';
           dirChanged = true;
@@ -99,7 +108,7 @@
       }
 
       // SPACE
-      if (Game.keysDown[32]) {
+      if (Game.keysDown[Game.keyCodes.SPACE]) {
 
         if (Game.projectileCooldown > now - Game.lastShot) {
           return;
