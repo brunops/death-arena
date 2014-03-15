@@ -135,7 +135,7 @@
     },
 
     isDirectionKey: function (keyCode) {
-      return keyCode === Game.keyCodes.UP ||
+      return keyCode === Game.keyCodes.UP   ||
              keyCode === Game.keyCodes.DOWN ||
              keyCode === Game.keyCodes.LEFT ||
              keyCode === Game.keyCodes.RIGHT;
