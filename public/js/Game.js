@@ -193,7 +193,10 @@
     },
 
     render: function () {
-      Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
+      Game.ctx.beginPath();
+      Game.ctx.fillStyle = 'steelblue';
+      Game.ctx.rect(0, 0, Game.canvas.width, Game.canvas.height);
+      Game.ctx.fill();
 
       for (var i = 0; i < Game.projectiles.length; ++i) {
         Game.projectiles[i].render(Game.ctx);
