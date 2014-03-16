@@ -24,6 +24,7 @@ io.sockets.on('connection', function(socket) {
   socket.broadcast.emit('player-connect', { id: socket.id, player: player });
 
   socket.on('disconnect', function () {
+    delete connectedPlayers[socket.id];
     socket.broadcast.emit('player-disconnect', { id: socket.id });
   });
 });
