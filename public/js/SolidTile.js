@@ -7,7 +7,7 @@
     height: 40
   });
 
-  SolidTile.color = 'gray';
+  SolidTile.color = 'steelblue';
 
   window.SolidTile = SolidTile;
 }());

@@ -217,7 +217,7 @@
 
     render: function () {
       Game.ctx.beginPath();
-      Game.ctx.fillStyle = 'steelblue';
+      Game.ctx.fillStyle = '#888';
       Game.ctx.rect(0, 0, Game.canvas.width, Game.canvas.height);
       Game.ctx.fill();
 
