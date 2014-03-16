@@ -180,6 +180,15 @@
             projectiles[i].x -= projectiles[i].speed * modifier;
             break;
         }
+
+        // Delete projectile if out of bounds
+        // a.k.a. leave to garbage collector
+        if (projectiles[i].x < -Projectile.width  ||
+            projectiles[i].x > Game.canvas.width  ||
+            projectiles[i].y < -Projectile.height ||
+            projectiles[i].y > Game.canvas.height) {
+          projectiles.splice(i--, 1);
+        }
       }
     },
 
