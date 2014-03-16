@@ -33,7 +33,7 @@
       Game.socket = io.connect(window.location.origin);
 
       Game.defineCanvas();
-      Game.createSolidTiles();
+      // Game.createSolidTiles();
 
       Game.bind();
     },
@@ -44,6 +44,14 @@
 
       Game.canvas.width = 640;//Game.canvas.clientWidth;
       Game.canvas.height = 520;//Game.canvas.clientHeight;
+
+      Game.floorImg = new Image();
+      Game.floorImg.src = 'images/floortile11.bmp';
+      Game.floorImg.isLoaded = false;
+      Game.floorImg.onload = function () {
+        Game.floorPattern = Game.ctx.createPattern(Game.floorImg, 'repeat');
+        Game.floorImg.isLoaded = true;
+      };
     },
 
     bind: function () {
@@ -236,8 +244,11 @@
     },
 
     render: function () {
+      if (!Game.floorImg.isLoaded) {
+        return;
+      }
       Game.ctx.beginPath();
-      Game.ctx.fillStyle = '#888';
+      Game.ctx.fillStyle = Game.floorPattern;
       Game.ctx.rect(0, 0, Game.canvas.width, Game.canvas.height);
       Game.ctx.fill();
 
@@ -245,7 +256,7 @@
         Game.projectiles[i].render(Game.ctx);
       }
 
-      Game.renderSolidTiles();
+      // Game.renderSolidTiles();
       Game.renderEnemies();
 
       if (Game.player)
