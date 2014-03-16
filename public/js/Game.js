@@ -1,4 +1,4 @@
-/* global Player, Projectile */
+/* global Player, Projectile, SolidTile */
 (function () {
   'use strict';
 
@@ -18,6 +18,9 @@
     // store all projectiles
     projectiles: [],
 
+    // Tile game obstacles
+    solidTiles: [],
+
     // Store timestamp with player last shot
     lastShot: 0,
 
@@ -31,6 +34,7 @@
       });
 
       Game.defineCanvas();
+      Game.createSolidTiles();
       Game.bind();
     },
 
@@ -201,7 +205,41 @@
       for (var i = 0; i < Game.projectiles.length; ++i) {
         Game.projectiles[i].render(Game.ctx);
       }
+
+      Game.renderSolidTiles();
+
       Game.player.render(Game.ctx);
+    },
+
+    createSolidTiles: function () {
+      var x = 60, y = 60;
+      while (y < Game.canvas.height - 60) {
+        x = 60;
+        while (x < Game.canvas.width - 60) {
+          Game.solidTiles.push(new SolidTile({
+            x: x,
+            y: y,
+            color: 'gray'
+          }));
+          x += 120;
+        }
+        y += 120;
+      }
+    },
+
+    renderSolidTiles: function () {
+      for (var i = 0; i < Game.solidTiles.length; i++) {
+        Game.ctx.beginPath();
+        Game.ctx.fillStyle = SolidTile.color;
+        Game.ctx.rect(
+          Game.solidTiles[i].x,
+          Game.solidTiles[i].y,
+          SolidTile.width,
+          SolidTile.height
+        );
+        Game.ctx.fill();
+        Game.ctx.stroke();
+      }
     }
   };
 
