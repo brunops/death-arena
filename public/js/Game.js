@@ -185,15 +185,26 @@
             break;
         }
 
-        // Delete projectile if out of bounds
+        // Delete projectile if out of bounds or collided with a tile
         // a.k.a. leave to garbage collector
         if (projectiles[i].x < -Projectile.width  ||
             projectiles[i].x > Game.canvas.width  ||
             projectiles[i].y < -Projectile.height ||
-            projectiles[i].y > Game.canvas.height) {
+            projectiles[i].y > Game.canvas.height ||
+            Game.isCollidedWithTile(projectiles[i])) {
           projectiles.splice(i--, 1);
         }
       }
+    },
+
+    isCollidedWithTile: function (entity) {
+      for (var i = 0; i < Game.solidTiles.length; ++i) {
+        if (entity.isCollided(Game.solidTiles[i])) {
+          return true;
+        }
+      }
+
+      return false;
     },
 
     render: function () {
