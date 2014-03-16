@@ -1,4 +1,4 @@
-/* global Player, Projectile, SolidTile */
+/* global Player, Projectile, SolidTile, io */
 (function () {
   'use strict';
 
@@ -24,17 +24,17 @@
     // Store timestamp with player last shot
     lastShot: 0,
 
+    enemies: {},
+
     // Cooldown between Player shots in ms
     projectileCooldown: 500,
 
     init: function () {
-      Game.player = new Player({
-        x: 100,
-        y: 200
-      });
+      Game.socket = io.connect(window.location.origin);
 
       Game.defineCanvas();
       Game.createSolidTiles();
+
       Game.bind();
     },
 
@@ -65,6 +65,22 @@
       window.addEventListener('blur', function () {
         Game.keysDown = {};
       }, false);
+
+      Game.socket.on('start', function (data) {
+        console.log(data);
+        Game.player = new Player(data.player);
+
+        for (var enemyId in data.enemies) {
+          Game.enemies[enemyId] = new Player(data.enemies[enemyId]);
+        }
+      });
+
+      Game.socket.on('player-connect', function (data) {
+        Game.enemies[data.id] = new Player(data.player);
+      });
+
+      Game.socket.on('player-disconnect', function (data) {
+      });
     },
 
     update: function (modifier) {
@@ -73,6 +89,10 @@
     },
 
     handleInput: function (modifier) {
+      if (!Game.player) {
+        return;
+      }
+
       var isMoving = false,
           player = Game.player,
           now = Date.now(),
@@ -226,8 +246,16 @@
       }
 
       Game.renderSolidTiles();
+      Game.renderEnemies();
 
-      Game.player.render(Game.ctx);
+      if (Game.player)
+        Game.player.render(Game.ctx);
+    },
+
+    renderEnemies: function () {
+      for (var enemyId in Game.enemies) {
+        Game.enemies[enemyId].render(Game.ctx);
+      }
     },
 
     createSolidTiles: function () {
