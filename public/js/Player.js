@@ -9,7 +9,7 @@
     height: 52,
     speed: 150,
     frameCooldown: 150,
-    spriteSrc: 'public/images/heroes.png',
+    spriteSrc: 'images/heroes.png',
     spritePositions: {
       'down':  [[10, 12], [57, 12],  [105, 12], [57, 12]],
       'left':  [[10, 75], [57, 75],  [105, 75], [57, 75]],
