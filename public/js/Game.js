@@ -38,8 +38,8 @@
       Game.canvas = document.getElementById('canvas');
       Game.ctx = Game.canvas.getContext('2d');
 
-      Game.canvas.width = Game.canvas.clientWidth;
-      Game.canvas.height = Game.canvas.clientHeight;
+      Game.canvas.width = 640;//Game.canvas.clientWidth;
+      Game.canvas.height = 520;//Game.canvas.clientHeight;
     },
 
     bind: function () {
