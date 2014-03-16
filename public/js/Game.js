@@ -75,7 +75,9 @@
     handleInput: function (modifier) {
       var isMoving = false,
           player = Game.player,
-          now = Date.now();
+          now = Date.now(),
+          oldX = player.x,
+          oldY = player.y;
 
       if (modifier > 1000) {
         return;
@@ -131,6 +133,12 @@
         if (player.x > 0) {
           player.x = player.x - (player.speed * modifier);
         }
+      }
+
+      // Reset player position if collided with a tile
+      if (Game.isCollidedWithTile(player)) {
+        player.x = oldX;
+        player.y = oldY;
       }
 
       // SPACE
