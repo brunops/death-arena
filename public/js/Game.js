@@ -67,7 +67,6 @@
       }, false);
 
       Game.socket.on('start', function (data) {
-        console.log(data);
         Game.player = new Player(data.player);
 
         for (var enemyId in data.enemies) {
@@ -80,6 +79,7 @@
       });
 
       Game.socket.on('player-disconnect', function (data) {
+        delete Game.enemies[data.id];
       });
     },
 
