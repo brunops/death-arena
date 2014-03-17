@@ -56,10 +56,19 @@
 
     bind: function () {
       document.addEventListener('keydown', function (e) {
+        var shouldPreventDefault = false;
+
         // Force player to move at only one direction
         // no diagonals allowed
         if (Game.isDirectionKey(e.keyCode)) {
           Game.resetPressedDirectionalKeys();
+          shouldPreventDefault = true;
+        }
+
+        // Prevent default for arrows and space key
+        // so browser won't move when playing
+        if (shouldPreventDefault || e.keyCode === Game.keyCodes.SPACE) {
+          e.preventDefault();
         }
 
         Game.keysDown[e.keyCode] = true;
@@ -88,6 +97,17 @@
 
       Game.socket.on('player-disconnect', function (data) {
         delete Game.enemies[data.id];
+      });
+
+      Game.socket.on('enemies-sync', function (data) {
+        for (var enemy in data) {
+          if (Game.enemies[enemy]) {
+            Game.enemies[enemy].x = data[enemy].x;
+            Game.enemies[enemy].y = data[enemy].y;
+            Game.enemies[enemy].direction = data[enemy].direction;
+            Game.enemies[enemy].updateSprite();
+          }
+        }
       });
     },
 
@@ -132,7 +152,7 @@
         }
 
         // Prevent player form going out of bounds
-        if (player.y < Game.canvas.height - Player.height) {
+        if (player.y < Game.canvas.height - Player.renderedHeight) {
           player.y = player.y + (player.speed * modifier);
         }
       }
@@ -145,7 +165,7 @@
         }
 
         // Prevent player form going out of bounds
-        if (player.x < Game.canvas.width - Player.width) {
+        if (player.x < Game.canvas.width - Player.renderedWidth) {
           player.x = player.x + (player.speed * modifier);
         }
       }
@@ -185,6 +205,12 @@
 
       if (isMoving) {
         player.updateSprite();
+
+        Game.socket.emit('player-move', {
+          x: Game.player.x,
+          y: Game.player.y,
+          direction: Game.player.direction
+        });
       }
     },
 
