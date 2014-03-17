@@ -259,8 +259,26 @@
       Game.renderSolidTiles();
       Game.renderEnemies();
 
-      if (Game.player)
-        Game.player.render(Game.ctx);
+      Game.renderPlayer();
+    },
+
+    renderPlayer: function () {
+      if (!Game.player) {
+        return;
+      }
+
+      Game.player.render(Game.ctx);
+
+      // Draw triangle on top of player
+      Game.ctx.strokeStyle = '008000';
+      Game.ctx.fillStyle = '#0f0';
+      Game.ctx.beginPath();
+      Game.ctx.moveTo(Game.player.x + (Player.renderedWidth / 2) - 5, Game.player.y - 15);
+      Game.ctx.lineTo(Game.player.x + (Player.renderedWidth / 2) + 5, Game.player.y - 15);
+      Game.ctx.lineTo(Game.player.x + (Player.renderedWidth / 2), Game.player.y - 5);
+      Game.ctx.fill();
+      Game.ctx.closePath();
+      Game.ctx.stroke();
     },
 
     renderEnemies: function () {
