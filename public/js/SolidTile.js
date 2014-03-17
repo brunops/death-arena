@@ -3,8 +3,9 @@
   'use strict';
 
   var SolidTile = Entity.extend({
-    width: 40,
-    height: 40
+    width: 32,
+    height: 32,
+    spriteSrc: 'images/solid-tile4.png'
   });
 
   SolidTile.color = 'steelblue';

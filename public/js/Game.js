@@ -33,7 +33,7 @@
       Game.socket = io.connect(window.location.origin);
 
       Game.defineCanvas();
-      // Game.createSolidTiles();
+      Game.createSolidTiles();
 
       Game.bind();
     },
@@ -256,7 +256,7 @@
         Game.projectiles[i].render(Game.ctx);
       }
 
-      // Game.renderSolidTiles();
+      Game.renderSolidTiles();
       Game.renderEnemies();
 
       if (Game.player)
@@ -283,20 +283,15 @@
         }
         y += 120;
       }
+
+      // remove middle solid tiles
+      Game.solidTiles.splice(6, 3);
+      Game.solidTiles.splice(8, 3);
     },
 
     renderSolidTiles: function () {
       for (var i = 0; i < Game.solidTiles.length; i++) {
-        Game.ctx.beginPath();
-        Game.ctx.fillStyle = SolidTile.color;
-        Game.ctx.rect(
-          Game.solidTiles[i].x,
-          Game.solidTiles[i].y,
-          SolidTile.width,
-          SolidTile.height
-        );
-        Game.ctx.fill();
-        Game.ctx.stroke();
+        Game.solidTiles[i].render(Game.ctx);
       }
     }
   };
