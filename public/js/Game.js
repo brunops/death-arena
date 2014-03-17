@@ -143,7 +143,7 @@
         }
 
         // Prevent player form going out of bounds
-        if (player.y < Game.canvas.height - Player.height) {
+        if (player.y < Game.canvas.height - Player.renderedHeight) {
           player.y = player.y + (player.speed * modifier);
         }
       }
@@ -156,7 +156,7 @@
         }
 
         // Prevent player form going out of bounds
-        if (player.x < Game.canvas.width - Player.width) {
+        if (player.x < Game.canvas.width - Player.renderedWidth) {
           player.x = player.x + (player.speed * modifier);
         }
       }
