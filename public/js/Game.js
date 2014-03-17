@@ -56,10 +56,19 @@
 
     bind: function () {
       document.addEventListener('keydown', function (e) {
+        var shouldPreventDefault = false;
+
         // Force player to move at only one direction
         // no diagonals allowed
         if (Game.isDirectionKey(e.keyCode)) {
           Game.resetPressedDirectionalKeys();
+          shouldPreventDefault = true;
+        }
+
+        // Prevent default for arrows and space key
+        // so browser won't move when playing
+        if (shouldPreventDefault || e.keyCode === Game.keyCodes.SPACE) {
+          e.preventDefault();
         }
 
         Game.keysDown[e.keyCode] = true;
