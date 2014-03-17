@@ -89,6 +89,17 @@
       Game.socket.on('player-disconnect', function (data) {
         delete Game.enemies[data.id];
       });
+
+      Game.socket.on('enemies-sync', function (data) {
+        for (var enemy in data) {
+          if (Game.enemies[enemy]) {
+            Game.enemies[enemy].x = data[enemy].x;
+            Game.enemies[enemy].y = data[enemy].y;
+            Game.enemies[enemy].direction = data[enemy].direction;
+            Game.enemies[enemy].updateSprite();
+          }
+        }
+      });
     },
 
     update: function (modifier) {
@@ -185,6 +196,12 @@
 
       if (isMoving) {
         player.updateSprite();
+
+        Game.socket.emit('player-move', {
+          x: Game.player.x,
+          y: Game.player.y,
+          direction: Game.player.direction
+        });
       }
     },
 

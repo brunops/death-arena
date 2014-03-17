@@ -12,7 +12,8 @@ var connectedPlayers = {};
 io.sockets.on('connection', function(socket) {
   var player = {
     x: Math.floor(Math.random() * 100),
-    y: [0, 460][Math.floor(Math.random() * 2)]
+    y: [0, 460][Math.floor(Math.random() * 2)],
+    direction: 'right'
   };
 
   socket.emit('start', {
@@ -26,6 +27,15 @@ io.sockets.on('connection', function(socket) {
   socket.on('disconnect', function () {
     delete connectedPlayers[socket.id];
     socket.broadcast.emit('player-disconnect', { id: socket.id });
+  });
+
+  socket.on('player-move', function (data) {
+    var player = connectedPlayers[socket.id];
+    player.x = data.x;
+    player.y = data.y;
+    player.direction = data.direction;
+
+    socket.broadcast.emit('enemies-sync', connectedPlayers);
   });
 });
 
