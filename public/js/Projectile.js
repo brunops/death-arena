@@ -7,8 +7,8 @@
     height: 36,
     speed: 400,
     spriteSrc: 'images/fireball.png',
-    renderedWidth: 30,
-    renderedHeight: 24
+    renderedWidth: 25,
+    renderedHeight: 20
   });
 
   Projectile.directionAngles = {
