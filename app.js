@@ -34,9 +34,21 @@ io.sockets.on('connection', function(socket) {
     player.x = data.x;
     player.y = data.y;
     player.direction = data.direction;
+  });
 
-    socket.broadcast.emit('enemies-sync', connectedPlayers);
+
+  socket.on('shot', function (data) {
+    socket.broadcast.emit('new-projectile', data);
   });
 });
+
+var syncEnemies = setInterval(function () {
+  if (Object.keys(connectedPlayers).length > 1) {
+    io.sockets.emit('enemies-sync', connectedPlayers);
+  }
+}, 10);
+
+
+
 
 console.log("Server listening on port 3000");
