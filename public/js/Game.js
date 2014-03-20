@@ -102,8 +102,8 @@
       Game.socket.on('enemies-sync', function (data) {
         for (var enemy in data) {
           if (Game.enemies[enemy]) {
-            Game.enemies[enemy].x = data[enemy].x;
-            Game.enemies[enemy].y = data[enemy].y;
+            Game.enemies[enemy].setX(data[enemy].x);
+            Game.enemies[enemy].setY(data[enemy].y);
             Game.enemies[enemy].direction = data[enemy].direction;
             Game.enemies[enemy].updateSprite();
           }
@@ -144,7 +144,7 @@
 
         // Prevent player form going out of bounds
         if (player.y > 0) {
-          player.y = player.y - (player.speed * modifier);
+          player.setY(player.y - (player.speed * modifier));
         }
       }
 
@@ -157,7 +157,7 @@
 
         // Prevent player form going out of bounds
         if (player.y < Game.canvas.height - Player.renderedHeight) {
-          player.y = player.y + (player.speed * modifier);
+          player.setY(player.y + (player.speed * modifier));
         }
       }
 
@@ -170,7 +170,7 @@
 
         // Prevent player form going out of bounds
         if (player.x < Game.canvas.width - Player.renderedWidth) {
-          player.x = player.x + (player.speed * modifier);
+          player.setX(player.x + (player.speed * modifier));
         }
       }
 
@@ -183,14 +183,14 @@
 
         // Prevent player form going out of bounds
         if (player.x > 0) {
-          player.x = player.x - (player.speed * modifier);
+          player.setX(player.x - (player.speed * modifier));
         }
       }
 
       // Reset player position if collided with a tile
       if (Game.isCollidedWithTile(player)) {
-        player.x = oldX;
-        player.y = oldY;
+        player.setX(oldX);
+        player.setY(oldY);
       }
 
       // SPACE

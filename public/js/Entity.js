@@ -62,6 +62,11 @@
     this.x = options.x || 0;
     this.y = options.y || 0;
 
+    // Store Entity last position
+    // so updateSprite can determine if entity has moved
+    this.lastX = this.x;
+    this.lastY = this.y;
+
     // assumes same number of sprites for every direction
     this.direction = options.direction || 'right';
     this.currentFrame = options.currentFrame || 0;
@@ -85,10 +90,24 @@
     }
   };
 
+  Entity.prototype.setX = function (x) {
+    this.lastX = this.x;
+    this.x = x;
+  };
+
+  Entity.prototype.setY = function (y) {
+    this.lastY = this.y;
+    this.y = y;
+  };
+
+  Entity.prototype.hasMoved = function () {
+    return this.x !== this.lastX || this.y !== this.lastY;
+  };
+
   Entity.prototype.updateSprite = function (now) {
     now = now || Date.now();
 
-    if (now - this.lastFrameUpdate > this.constructor.frameCooldown) {
+    if (this.hasMoved() && now - this.lastFrameUpdate > this.constructor.frameCooldown) {
       this.currentFrame += 1;
       this.lastFrameUpdate = now;
       if (this.constructor.totalFrames <= this.currentFrame) {
