@@ -8,7 +8,5 @@
     spriteSrc: 'images/solid-tile4.png'
   });
 
-  SolidTile.color = 'steelblue';
-
   window.SolidTile = SolidTile;
 }());
