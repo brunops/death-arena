@@ -1,4 +1,4 @@
-/* global Player, Projectile, SolidTile, io */
+/* global Player, Projectile, SolidTile */
 (function () {
   'use strict';
 
@@ -30,7 +30,7 @@
     projectileCooldown: 500,
 
     init: function () {
-      Game.socket = io.connect(window.location.origin);
+      // Game.socket = io.connect(window.location.origin);
 
       Game.defineCanvas();
       Game.createSolidTiles();
@@ -42,8 +42,10 @@
       Game.canvas = document.getElementById('canvas');
       Game.ctx = Game.canvas.getContext('2d');
 
-      Game.canvas.width = 640;//Game.canvas.clientWidth;
-      Game.canvas.height = 520;//Game.canvas.clientHeight;
+      Game.player = new Player();
+
+      Game.canvas.width = 640;  //Game.canvas.clientWidth;
+      Game.canvas.height = 520; //Game.canvas.clientHeight;
 
       Game.floorImg = new Image();
       Game.floorImg.src = 'images/floortile11.bmp';
@@ -82,37 +84,6 @@
       window.addEventListener('blur', function () {
         Game.keysDown = {};
       }, false);
-
-      Game.socket.on('start', function (data) {
-        Game.player = new Player(data.player);
-
-        for (var enemyId in data.enemies) {
-          Game.enemies[enemyId] = new Player(data.enemies[enemyId]);
-        }
-      });
-
-      Game.socket.on('player-connect', function (data) {
-        Game.enemies[data.id] = new Player(data.player);
-      });
-
-      Game.socket.on('player-disconnect', function (data) {
-        delete Game.enemies[data.id];
-      });
-
-      Game.socket.on('enemies-sync', function (data) {
-        for (var enemy in data) {
-          if (Game.enemies[enemy]) {
-            Game.enemies[enemy].setX(data[enemy].x);
-            Game.enemies[enemy].setY(data[enemy].y);
-            Game.enemies[enemy].direction = data[enemy].direction;
-            Game.enemies[enemy].updateSprite();
-          }
-        }
-      });
-
-      Game.socket.on('new-projectile', function (data) {
-        Game.projectiles.push(new Projectile(data));
-      });
     },
 
     update: function (modifier) {
@@ -206,18 +177,11 @@
           };
 
           Game.projectiles.push(new Projectile(newProjectile));
-          Game.socket.emit('shot', newProjectile);
         }
       }
 
       if (isMoving) {
         player.updateSprite();
-
-        Game.socket.emit('player-move', {
-          x: Game.player.x,
-          y: Game.player.y,
-          direction: Game.player.direction
-        });
       }
     },
 
