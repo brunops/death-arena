@@ -33,26 +33,26 @@ module.exports = (function () {
       Game.createSolidTiles();
     },
 
-    update: function (modifier) {
-      Game.updateProjectiles(modifier);
+    update: function (deltaModifier) {
+      Game.updateProjectiles(deltaModifier);
     },
 
-    updateProjectiles: function (modifier) {
+    updateProjectiles: function (deltaModifier) {
       var projectiles = Game.projectiles;
 
       for (var id in projectiles) {
         switch (projectiles[id].direction) {
           case 'up':
-            projectiles[id].y -= projectiles[id].speed * modifier;
+            projectiles[id].y -= projectiles[id].speed * deltaModifier;
             break;
           case 'down':
-            projectiles[id].y += projectiles[id].speed * modifier;
+            projectiles[id].y += projectiles[id].speed * deltaModifier;
             break;
           case 'right':
-            projectiles[id].x += projectiles[id].speed * modifier;
+            projectiles[id].x += projectiles[id].speed * deltaModifier;
             break;
           case 'left':
-            projectiles[id].x -= projectiles[id].speed * modifier;
+            projectiles[id].x -= projectiles[id].speed * deltaModifier;
             break;
         }
 
