@@ -196,7 +196,7 @@ module.exports = (function () {
     playerShot: function (player) {
       var now = Date.now();
 
-      if (Game.projectileCooldown < now - player.lastShot) {
+      if (Game.shotCooldown < now - player.lastShot) {
         player.lastShot = now;
 
         // Centralize fireball in respect to player
@@ -238,11 +238,16 @@ module.exports = (function () {
   };
 
   return {
+    init: Game.init,
+
     // direct access needed to allow rendering
     players: Game.players,
 
     // direct access needed to allow rendering
     projectiles: Game.projectiles,
+
+    // direct access needed to allow rendering
+    solidTiles: Game.solidTiles,
 
     // add a new player to the game
     // no player is special in here
