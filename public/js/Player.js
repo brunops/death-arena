@@ -1,5 +1,8 @@
-/* global Entity */
-(function () {
+/* global module, require */
+
+var Entity = require('./Entity');
+
+module.exports = (function () {
   'use strict';
 
   var Player = Entity.extend({
@@ -21,5 +24,5 @@
     direction: 'down'
   });
 
-  window.Player = Player;
+  return Player;
 }());
