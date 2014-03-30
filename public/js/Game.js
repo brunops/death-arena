@@ -100,11 +100,12 @@ module.exports = (function () {
     },
 
     addPlayer: function (player) {
-      player = player || new Player();
-
-      if (typeof player.id === 'undefined') {
-        player.id = Game.nextPlayerId++;
+      var id = player ? player.id : null;
+      if (!player || typeof player !== 'Player') {
+        player = new Player(player);
       }
+
+      player.id = id || Game.nextPlayerId++;
 
       player.lastShot = 0;
       Game.players[player.id] = player;
@@ -219,7 +220,7 @@ module.exports = (function () {
 
       for (id in Game.projectiles) {
         worldState.projectiles.push({
-          id: id,
+          id: parseInt(id, 10),
           x: Game.projectiles[id].x,
           y: Game.projectiles[id].y
         });
@@ -227,7 +228,7 @@ module.exports = (function () {
 
       for (id in Game.players) {
         worldState.players.push({
-          id: id,
+          id: parseInt(id, 10),
           x: Game.players[id].x,
           y: Game.players[id].y
         });
