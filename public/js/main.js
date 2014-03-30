@@ -1,4 +1,4 @@
-/* global Game */
+/* global require */
 window.requestAnimFrame = (function () {
   'use strict';
   return window.requestAnimationFrame       ||
@@ -9,21 +9,15 @@ window.requestAnimFrame = (function () {
          };
 })();
 
+var Client = require('./Client');
+
 (function () {
   'use strict';
 
-  Game.init();
+  var client = new Client(640, 520);
 
-  var before = Date.now();
   window.requestAnimFrame(function update() {
-    var now = Date.now(),
-        delta = now - before,
-        modifier = delta / 1000;
-
-    Game.update(modifier);
-    Game.render();
-
-    before = now;
+    client.update();
     window.requestAnimFrame(update);
   });
 
