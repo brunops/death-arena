@@ -166,7 +166,7 @@ module.exports = (function () {
         player.direction = 'right';
 
         // Prevent Player from going out of bounds
-        if (player.y < Game.width - Player.renderedWidth) {
+        if (player.x < Game.width - Player.renderedWidth) {
           player.setX(player.x + (player.speed * input.deltaModifier));
         }
       }
