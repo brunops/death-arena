@@ -1,5 +1,7 @@
-/* global Entity */
-(function () {
+/* global module, require */
+var Entity = require('./Entity');
+
+module.exports = (function () {
   'use strict';
 
   var Projectile = Entity.extend({
@@ -31,6 +33,5 @@
     ctx.restore();
   };
 
-  // Make Projectile globally available
-  window.Projectile = Projectile;
+  return Projectile;
 }());
