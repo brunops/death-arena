@@ -1,5 +1,4 @@
 /* global module, require */
-
 var Entity = require('./Entity');
 
 module.exports = (function () {

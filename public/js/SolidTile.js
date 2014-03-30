@@ -1,5 +1,7 @@
-/* global Entity */
-(function () {
+/* global module, require */
+var Entity = require('./Entity');
+
+module.exports = (function () {
   'use strict';
 
   var SolidTile = Entity.extend({
@@ -8,5 +10,5 @@
     spriteSrc: 'images/solid-tile4.png'
   });
 
-  window.SolidTile = SolidTile;
+  return SolidTile;
 }());

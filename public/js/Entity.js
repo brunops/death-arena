@@ -1,4 +1,5 @@
-(function () {
+/* global module */
+module.exports = (function () {
   'use strict';
 
   function Entity(options) {
@@ -129,5 +130,5 @@
     );
   };
 
-  window.Entity = Entity;
+  return Entity;
 }());
