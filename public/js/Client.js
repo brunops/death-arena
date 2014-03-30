@@ -20,8 +20,8 @@ module.exports = (function () {
 
   Client.prototype.init = function (width, height) {
     this.game = Game;
-
     this.game.init(width, height);
+
     this.player = this.game.addPlayer();
 
     // current keyboard state
@@ -156,7 +156,10 @@ module.exports = (function () {
         deltaModifier = (now - (this.lastInputTime ? this.lastInputTime : now)) / 1000;
 
     this.lastInputTime = now;
-    this.game.update(deltaModifier);
+
+    if (deltaModifier < 1) {
+      this.game.update(deltaModifier);
+    }
 
     if (!this.hasNewInput()) {
       // nothing new to send
