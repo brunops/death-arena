@@ -68,7 +68,6 @@ module.exports = (function () {
     this.processEntities(data.worldState, 'players', Player);
     this.processEntities(data.worldState, 'projectiles', Projectile);
 
-    console.log(this.game)
     this.player = this.game.players[data.playerId];
   };
 
