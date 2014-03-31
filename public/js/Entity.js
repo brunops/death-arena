@@ -1,4 +1,8 @@
 /* global module */
+if (typeof Image === 'undefined') {
+  Image = function() {};
+}
+
 module.exports = (function () {
   'use strict';
 

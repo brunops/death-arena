@@ -1,5 +1,6 @@
-/* global module, require */
+/* global module, require, io */
 var Player = require('./Player'),
+    Projectile = require('./Projectile'),
     Game = require('./Game');
 
 module.exports = (function () {
@@ -21,13 +22,20 @@ module.exports = (function () {
   Client.prototype.init = function (width, height) {
     this.game = Game;
     this.game.init(width, height);
+    this.defineCanvas(width, height);
 
-    this.player = this.game.addPlayer();
+    this.player = null;
 
     // current keyboard state
     this.keyboardState = {};
 
-    this.defineCanvas(width, height);
+    // communication with server
+    this.socket = io.connect(window.location.origin);
+
+    // Inputs not yet acknolwdged by the server
+    this.pendingInputs = [];
+    this.inputNumber = 0;
+
     this.bindEvents();
   };
 
@@ -52,6 +60,35 @@ module.exports = (function () {
     document.addEventListener('keydown', this.handleKeyDown.bind(this), false);
     document.addEventListener('keyup', this.handleKeyUp.bind(this), false);
     window.addEventListener('blur', this.handleBlur.bind(this), false);
+
+    this.socket.on('connection-established', this.connectionEstablished.bind(this));
+  };
+
+  Client.prototype.connectionEstablished = function (data) {
+    this.processEntities(data.worldState, 'players', Player);
+    this.processEntities(data.worldState, 'projectiles', Projectile);
+
+    this.player = this.game.players[data.playerId];
+  };
+
+  Client.prototype.processEntities = function (worldState, collectionName, Constructor) {
+    var i, id, newEntity;
+
+    for (i = 0; i < worldState[collectionName].length; ++i) {
+      id = parseInt(worldState[collectionName][i].id, 10);
+
+      if (!this.game[collectionName][id]) {
+        newEntity = new Constructor(worldState[collectionName][i]);
+        newEntity.id = id;
+
+        this.game.addPlayer(newEntity);
+      }
+      else {
+        this.game[collectionName][id].x = worldState[collectionName][id].x;
+        this.game[collectionName][id].y = worldState[collectionName][id].y;
+        this.game[collectionName][id].direction = worldState[collectionName][id].direction;
+      }
+    }
   };
 
   Client.prototype.handleKeyDown = function (e) {
@@ -135,8 +172,14 @@ module.exports = (function () {
   };
 
   Client.prototype.renderEnemies = function () {
-    for (var player in this.game.players) {
-      this.game.players[player].render(this.ctx);
+    if (!this.player) {
+      return;
+    }
+
+    for (var playerId in this.game.players) {
+      if (parseInt(playerId, 10) !== this.player.id) {
+        this.game.players[playerId].render(this.ctx);
+      }
     }
   };
 
