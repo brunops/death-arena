@@ -4,9 +4,11 @@ var send = require('send');
 
 var game = require('./public/js/Game');
 
+var port = process.env.PORT || 3000;
+
 var server = http.createServer(function (req, res) {
-  send(req, req.url).root(__dirname + '/public/').pipe(res);
-}).listen(process.env.PORT || 3000);
+  send(req, req.url).root(__dirname + '/public/build').pipe(res);
+}).listen(port);
 
 var io = sio.listen(server);
 var playerIds = {};
@@ -26,4 +28,4 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-console.log("Server listening on port 3000");
+console.log("Server listening on port " + port);
