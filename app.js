@@ -14,6 +14,8 @@ var server = http.createServer(function (req, res) {
 var io = sio.listen(server);
 var playerIds = {};
 
+var clientInputsQueue = [];
+
 io.sockets.on('connection', function (socket) {
   var newPlayer = game.addPlayer();
 
@@ -26,6 +28,11 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     delete game.players[playerIds[socket.id]];
+  });
+
+  socket.on('input', function (data) {
+    data.playerId = playerIds[socket.id];
+    clientInputsQueue = clientInputsQueue.concat(data);
   });
 });
 
