@@ -221,16 +221,16 @@ module.exports = (function () {
       for (id in Game.projectiles) {
         worldState.projectiles.push({
           id: parseInt(id, 10),
-          x: Game.projectiles[id].x,
-          y: Game.projectiles[id].y
+          x: parseFloat(Game.projectiles[id].x.toFixed(2)),
+          y: parseFloat(Game.projectiles[id].y.toFixed(2))
         });
       }
 
       for (id in Game.players) {
         worldState.players.push({
           id: parseInt(id, 10),
-          x: Game.players[id].x,
-          y: Game.players[id].y
+          x: parseFloat(Game.players[id].x.toFixed(2)),
+          y: parseFloat(Game.players[id].y.toFixed(2))
         });
       }
 
