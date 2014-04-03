@@ -3,6 +3,7 @@ var http = require('http');
 var send = require('send');
 
 var game = require('./public/js/Game');
+game.init(640, 520);
 
 var port = process.env.PORT || 3000;
 
