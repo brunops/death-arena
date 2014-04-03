@@ -1,8 +1,4 @@
 /* global module */
-if (typeof Image === 'undefined') {
-  Image = function() {};
-}
-
 module.exports = (function () {
   'use strict';
 
@@ -44,7 +40,7 @@ module.exports = (function () {
 
     Surrogate.speed = options.speed || 100;
 
-    if (options.spriteSrc) {
+    if (typeof Image !== 'undefined' && options.spriteSrc) {
       Surrogate.spriteLoaded = false;
       Surrogate.sprite = new Image();
       Surrogate.sprite.src = options.spriteSrc;
