@@ -19,12 +19,17 @@ gulp.task('images', function () {
     .pipe(gulp.dest('./public/build/images'))
 });
 
+gulp.task('html', function () {
+  gulp.src('./public/*.html')
+    .pipe(gulp.dest('./public/build'))
+});
+
 gulp.task('default', function () {
   nodemon({
     script: 'app.js',
     ext: 'html js css'
   })
-  .on('change', ['scripts', 'css', 'images'])
+  .on('change', ['scripts', 'css', 'images', 'html'])
   .on('restart', function () {
     console.log('restarted!')
   });
