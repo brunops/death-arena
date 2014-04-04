@@ -215,11 +215,30 @@ module.exports = (function () {
     input.deltaModifier = deltaModifier;
     input.entityId = this.entityId;
     input.inputNumber = this.inputNumber++;
+    input.sent = false;
     input.t = now;
 
     // client prediction
     // apply input to entity for instant feedback
     this.game.applyInput(this.player.id, input);
+
+    this.pendingInputs.push(input);
+  };
+
+  Client.prototype.sendNewInputs = function () {
+    var newInputs = [];
+
+    for (var i = 0; i < this.pendingInputs.length; ++i) {
+      if (!this.pendingInputs[i].sent) {
+        this.pendingInputs[i].sent = true;
+        newInputs.push(this.pendingInputs[i]);
+      }
+    }
+
+    if (newInputs.length) {
+      console.log(newInputs)
+      this.socket.emit('input', newInputs);
+    }
   };
 
   Client.prototype.keyboardStateClone = function () {

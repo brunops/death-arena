@@ -21,4 +21,6 @@ var Client = require('./Client');
     window.requestAnimFrame(update);
   });
 
+  setInterval(client.sendNewInputs.bind(client), 1000);
+
 }());
