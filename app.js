@@ -36,4 +36,34 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
+var pendingWorldStates = [];
+var currentWorldState = 0;
+
+setInterval(function () {
+  var input, worldState;
+
+  if (clientInputsQueue.length) {
+    for (var i = 0; i < clientInputsQueue.length; ++i) {
+      input = clientInputsQueue[i];
+      game.applyInput(input.playerId, input);
+      game.update();
+    }
+    clientInputsQueue = [];
+
+    worldState = game.getWorldState();
+    worldState.number = currentWorldState++;
+    worldState.lastInput = input.inputNumber;
+    worldState.t = Date.now();
+
+    pendingWorldStates.push(worldState);
+  }
+}, 15);
+
+setInterval(function () {
+  if (pendingWorldStates.length) {
+    io.sockets.volatile.emit('world-update', pendingWorldStates);
+    pendingWorldStates = [];
+  }
+}, 500);
+
 console.log("Server listening on port " + port);

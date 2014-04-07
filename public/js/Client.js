@@ -62,6 +62,7 @@ module.exports = (function () {
     window.addEventListener('blur', this.handleBlur.bind(this), false);
 
     this.socket.on('connection-established', this.connectionEstablished.bind(this));
+    this.socket.on('world-update', this.processWorldUpdate.bind(this));
   };
 
   Client.prototype.connectionEstablished = function (data) {
@@ -71,10 +72,28 @@ module.exports = (function () {
     this.player = this.game.players[data.playerId];
   };
 
-  Client.prototype.processEntities = function (worldState, collectionName, Constructor) {
-    var i, id, newEntity;
+  Client.prototype.processWorldUpdate = function (worldStates) {
+    for (var i = 0; i < worldStates.length; i++) {
+      var lastProcessedInput = worldStates[i].lastInput;
 
-    for (i = 0; i < worldState[collectionName].length; ++i) {
+      this.processEntities(worldStates[i], 'players', Player);
+
+      // apply pending inputs
+      for (var j = 0; j < this.pendingInputs.length; ++j) {
+        if (this.pendingInputs[j].inputNumber <= lastProcessedInput) {
+          this.pendingInputs.splice(j--, 1);
+        }
+        else {
+          this.game.applyInput(this.player.id, this.pendingInputs[j]);
+        }
+      }
+    }
+  };
+
+  Client.prototype.processEntities = function (worldState, collectionName, Constructor) {
+    var id, newEntity;
+
+    for (var i = 0; i < worldState[collectionName].length; ++i) {
       id = parseInt(worldState[collectionName][i].id, 10);
 
       if (!this.game[collectionName][id]) {
@@ -84,9 +103,9 @@ module.exports = (function () {
         this.game.addPlayer(newEntity);
       }
       else {
-        this.game[collectionName][id].x = worldState[collectionName][id].x;
-        this.game[collectionName][id].y = worldState[collectionName][id].y;
-        this.game[collectionName][id].direction = worldState[collectionName][id].direction;
+        this.game[collectionName][id].x = worldState[collectionName][i].x;
+        this.game[collectionName][id].y = worldState[collectionName][i].y;
+        this.game[collectionName][id].direction = worldState[collectionName][i].direction;
       }
     }
   };
@@ -213,7 +232,7 @@ module.exports = (function () {
     // multiple inputs sharing state
     var input = this.keyboardStateClone();
     input.deltaModifier = deltaModifier;
-    input.entityId = this.entityId;
+    input.playerId = this.player.id;
     input.inputNumber = this.inputNumber++;
     input.sent = false;
     input.t = now;
@@ -236,7 +255,6 @@ module.exports = (function () {
     }
 
     if (newInputs.length) {
-      console.log(newInputs)
       this.socket.emit('input', newInputs);
     }
   };
