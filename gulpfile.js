@@ -1,11 +1,13 @@
 var gulp = require('gulp'),
-    browserify = require('gulp-browserify'),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
     nodemon = require('gulp-nodemon');
 
 
 gulp.task('scripts', function () {
-  gulp.src('./public/js/main.js')
-    .pipe(browserify())
+  return browserify('./public/js/main.js')
+    .bundle()
+    .pipe(source('bundle.js'))
     .pipe(gulp.dest('./public/build/js'));
 });
 
