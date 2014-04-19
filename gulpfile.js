@@ -1,8 +1,8 @@
 var gulp = require('gulp'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
-    nodemon = require('gulp-nodemon');
-
+    nodemon = require('gulp-nodemon'),
+    open = require('gulp-open');
 
 gulp.task('scripts', function () {
   return browserify('./public/js/main.js')
@@ -26,13 +26,23 @@ gulp.task('html', function () {
     .pipe(gulp.dest('./public/build'))
 });
 
+gulp.task('open', function () {
+  var options = {
+    app: 'google chrome',
+    url: 'http://localhost:3000'
+  };
+
+  return gulp.src('./public/build/index.html')
+    .pipe(open('', options));
+});
+
 gulp.task('default', function () {
+  var tasks = ['scripts', 'css', 'images', 'html', 'open'];
+
   nodemon({
     script: 'app.js',
     ext: 'html js css'
   })
-  .on('change', ['scripts', 'css', 'images', 'html'])
-  .on('restart', function () {
-    console.log('restarted!')
-  });
+  .on('start', tasks)
+  .on('change', tasks)
 });
