@@ -32,9 +32,17 @@ module.exports = (function () {
     // communication with server
     this.socket = io.connect(window.location.origin);
 
-    // Inputs not yet acknolwdged by the server
+    // Inputs not yet acknowledged by the server
     this.pendingInputs = [];
     this.inputNumber = 0;
+
+    // World states received from the server
+    this.worldUpdatesBuffer = [];
+
+    // How long updates are stored in ms
+    // Updates need to be stored as the simulation runs in the past
+    // and interpolation is needed
+    this.storeUpdatesFor = 200;
 
     this.bindEvents();
   };
@@ -62,7 +70,7 @@ module.exports = (function () {
     window.addEventListener('blur', this.handleBlur.bind(this), false);
 
     this.socket.on('connection-established', this.connectionEstablished.bind(this));
-    this.socket.on('world-update', this.processWorldUpdate.bind(this));
+    this.socket.on('world-update', this.worldUpdateReceived.bind(this));
   };
 
   Client.prototype.connectionEstablished = function (data) {
@@ -72,7 +80,37 @@ module.exports = (function () {
     this.player = this.game.players[data.playerId];
   };
 
-  Client.prototype.processWorldUpdate = function (worldState) {
+  Client.prototype.worldUpdateReceived = function (worldState) {
+    this.worldUpdatesBuffer.push(worldState);
+  };
+
+  Client.prototype.removeOldUpdates = function () {
+    var oldUpdates = 0,
+        now = Date.now();
+
+    if (!this.worldUpdatesBuffer.length) {
+      return;
+    }
+
+    // remove too old updates
+    while (this.worldUpdatesBuffer[oldUpdates] &&
+          now - this.worldUpdatesBuffer[oldUpdates].t > this.storeUpdatesFor) {
+      oldUpdates += 1;
+    }
+
+    // remove all old updates at once
+    if (oldUpdates) {
+      this.worldUpdatesBuffer.splice(0, oldUpdates);
+    }
+  };
+
+  Client.prototype.processWorldUpdates = function () {
+    var worldState = this.worldUpdatesBuffer[this.worldUpdatesBuffer.length - 1];
+
+    if (!worldState) {
+      return;
+    }
+
     this.processEntities(worldState, 'players', Player);
 
     // apply pending inputs
@@ -96,7 +134,7 @@ module.exports = (function () {
         newEntity = new Constructor(worldState[collectionName][i]);
         newEntity.id = id;
 
-        this.game.addPlayer(newEntity);
+        this.game.addPlayer(newEntity); // <-- BUG HERE - works only for players. duh!
       }
       else {
         this.game[collectionName][id].x = worldState[collectionName][i].x;
@@ -206,6 +244,8 @@ module.exports = (function () {
 
   Client.prototype.update = function () {
     this.processInputs();
+    this.removeOldUpdates();
+    this.processWorldUpdates();
     this.render();
   };
 
