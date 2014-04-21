@@ -221,26 +221,24 @@ module.exports = (function () {
     getWorldState: function () {
       var id,
           worldState = {
-            players: [],
-            projectiles: []
+            players: {},
+            projectiles: {}
           };
 
       for (id in Game.projectiles) {
-        worldState.projectiles.push({
-          id: parseInt(id, 10),
+        worldState.projectiles[id] = {
           direction: Game.projectiles[id].direction,
           x: parseFloat(Game.projectiles[id].x.toFixed(2)),
           y: parseFloat(Game.projectiles[id].y.toFixed(2))
-        });
+        };
       }
 
       for (id in Game.players) {
-        worldState.players.push({
-          id: parseInt(id, 10),
+        worldState.players[id] = {
           direction: Game.players[id].direction,
           x: parseFloat(Game.players[id].x.toFixed(2)),
           y: parseFloat(Game.players[id].y.toFixed(2))
-        });
+        };
       }
 
       return worldState;

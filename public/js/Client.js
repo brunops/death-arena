@@ -128,21 +128,19 @@ module.exports = (function () {
   };
 
   Client.prototype.processEntities = function (worldState, collectionName, Constructor) {
-    var id, newEntity;
+    var newEntity;
 
-    for (var i = 0; i < worldState[collectionName].length; ++i) {
-      id = parseInt(worldState[collectionName][i].id, 10);
-
+    for (var id in worldState[collectionName]) {
       if (!this.game[collectionName][id]) {
-        newEntity = new Constructor(worldState[collectionName][i]);
+        newEntity = new Constructor(worldState[collectionName][id]);
         newEntity.id = id;
 
         this.game.addPlayer(newEntity); // <-- BUG HERE - works only for players. duh!
       }
       else {
-        this.game[collectionName][id].x = worldState[collectionName][i].x;
-        this.game[collectionName][id].y = worldState[collectionName][i].y;
-        this.game[collectionName][id].direction = worldState[collectionName][i].direction;
+        this.game[collectionName][id].x = worldState[collectionName][id].x;
+        this.game[collectionName][id].y = worldState[collectionName][id].y;
+        this.game[collectionName][id].direction = worldState[collectionName][id].direction;
       }
     }
   };
