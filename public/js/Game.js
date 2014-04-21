@@ -22,6 +22,8 @@ module.exports = (function () {
 
     nextProjectileId: 0,
 
+    lastUpdate: null,
+
     // Cooldown between shots of same player in ms
     shotCooldown: 500,
 
@@ -33,7 +35,12 @@ module.exports = (function () {
       Game.createSolidTiles();
     },
 
-    update: function (deltaModifier) {
+    update: function () {
+      var now = Date.now(),
+          deltaModifier = (now - Game.lastUpdate) / 1000.0;
+
+      Game.lastUpdate = now;
+
       Game.updateProjectiles(deltaModifier);
     },
 
