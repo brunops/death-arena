@@ -36,33 +36,38 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-var pendingWorldStates = [];
-var currentWorldState = 0;
+var lastSentUpdateInput = 0,
+    lastProcessedInput = 0,
+    currentWorldState = 0;
 
 setInterval(function () {
-  var input, worldState;
+  var input;
 
   if (clientInputsQueue.length) {
     for (var i = 0; i < clientInputsQueue.length; ++i) {
       input = clientInputsQueue[i];
       game.applyInput(input.playerId, input);
       game.update();
+
+      lastProcessedInput = input.inputNumber;
     }
+
     clientInputsQueue = [];
-
-    worldState = game.getWorldState();
-    worldState.number = currentWorldState++;
-    worldState.lastInput = input.inputNumber;
-    worldState.t = Date.now();
-
-    pendingWorldStates.push(worldState);
   }
 }, 15);
 
 setInterval(function () {
-  if (pendingWorldStates.length) {
-    io.sockets.volatile.emit('world-update', pendingWorldStates);
-    pendingWorldStates = [];
+  var worldState;
+
+  if (lastSentUpdateInput < lastProcessedInput) {
+    worldState = game.getWorldState();
+    worldState.number = currentWorldState++;
+    worldState.lastInput = lastProcessedInput;
+    worldState.t = Date.now();
+
+    io.sockets.volatile.emit('world-update', worldState);
+
+    lastSentUpdateInput = worldState.lastInput;
   }
 }, 1000 / 20);
 
