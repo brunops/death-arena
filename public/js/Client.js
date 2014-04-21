@@ -72,20 +72,16 @@ module.exports = (function () {
     this.player = this.game.players[data.playerId];
   };
 
-  Client.prototype.processWorldUpdate = function (worldStates) {
-    for (var i = 0; i < worldStates.length; i++) {
-      var lastProcessedInput = worldStates[i].lastInput;
+  Client.prototype.processWorldUpdate = function (worldState) {
+    this.processEntities(worldState, 'players', Player);
 
-      this.processEntities(worldStates[i], 'players', Player);
-
-      // apply pending inputs
-      for (var j = 0; j < this.pendingInputs.length; ++j) {
-        if (this.pendingInputs[j].inputNumber <= lastProcessedInput) {
-          this.pendingInputs.splice(j--, 1);
-        }
-        else {
-          this.game.applyInput(this.player.id, this.pendingInputs[j]);
-        }
+    // apply pending inputs
+    for (var j = 0; j < this.pendingInputs.length; ++j) {
+      if (this.pendingInputs[j].inputNumber <= worldState.lastInput) {
+        this.pendingInputs.splice(j--, 1);
+      }
+      else {
+        this.game.applyInput(this.player.id, this.pendingInputs[j]);
       }
     }
   };
