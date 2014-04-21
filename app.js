@@ -64,6 +64,6 @@ setInterval(function () {
     io.sockets.volatile.emit('world-update', pendingWorldStates);
     pendingWorldStates = [];
   }
-}, 500);
+}, 1000 / 20);
 
 console.log("Server listening on port " + port);
