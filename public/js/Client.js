@@ -256,13 +256,15 @@ module.exports = (function () {
   };
 
   Client.prototype.keyboardStateClone = function () {
-    return {
-      LEFT: this.keyboardState[Client.keyCodes.LEFT],
-      RIGHT: this.keyboardState[Client.keyCodes.RIGHT],
-      UP: this.keyboardState[Client.keyCodes.UP],
-      DOWN: this.keyboardState[Client.keyCodes.DOWN],
-      SPACE: this.keyboardState[Client.keyCodes.SPACE]
-    };
+    var state = {};
+
+    for (var key in Client.keyCodes) {
+      if (this.keyboardState[Client.keyCodes[key]]) {
+        state[key] = true;
+      }
+    }
+
+    return state;
   };
 
   Client.prototype.hasNewInput = function () {
