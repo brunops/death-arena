@@ -112,10 +112,13 @@ module.exports = (function () {
     }
 
     this.processEntities(worldState, 'players', Player);
+    this.applyPrediction(worldState.lastInput);
+  };
 
+  Client.prototype.applyPrediction = function (lastProcessedInput) {
     // apply pending inputs
     for (var j = 0; j < this.pendingInputs.length; ++j) {
-      if (this.pendingInputs[j].inputNumber <= worldState.lastInput) {
+      if (this.pendingInputs[j].inputNumber <= lastProcessedInput) {
         this.pendingInputs.splice(j--, 1);
       }
       else {
