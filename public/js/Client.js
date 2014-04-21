@@ -117,12 +117,12 @@ module.exports = (function () {
 
   Client.prototype.applyPrediction = function (lastProcessedInput) {
     // apply pending inputs
-    for (var j = 0; j < this.pendingInputs.length; ++j) {
-      if (this.pendingInputs[j].inputNumber <= lastProcessedInput) {
-        this.pendingInputs.splice(j--, 1);
+    for (var i = 0; i < this.pendingInputs.length; ++i) {
+      if (this.pendingInputs[i].inputNumber <= lastProcessedInput) {
+        this.pendingInputs.splice(i--, 1);
       }
       else {
-        this.game.applyInput(this.player.id, this.pendingInputs[j]);
+        this.game.applyInput(this.player.id, this.pendingInputs[i]);
       }
     }
   };
