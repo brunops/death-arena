@@ -12,33 +12,42 @@ var server = http.createServer(function (req, res) {
 }).listen(port);
 
 var io = sio.listen(server);
-var playerIds = {};
 
+var playersInfo = {};
 var clientInputsQueue = [];
 
 io.sockets.on('connection', function (socket) {
-  var newPlayer = game.addPlayer();
+  var player = game.addPlayer();
 
-  playerIds[socket.id] = newPlayer.id;
+  playersInfo[player.id] = {
+    socketId: socket.id,
+    lastProcessedInput: 0
+  };
+
+  console.log(playersInfo)
 
   socket.emit('connection-established', {
-    playerId: newPlayer.id,
+    playerId: player.id,
     worldState: game.getWorldState()
   });
 
   socket.on('disconnect', function () {
-    delete game.players[playerIds[socket.id]];
+    delete game.players[player.id];
   });
 
   socket.on('input', function (data) {
-    data.playerId = playerIds[socket.id];
-    clientInputsQueue = clientInputsQueue.concat(data);
+    for (var i = 0; i < data.length; ++i) {
+      var input = data[i];
+
+      // prevent players from pretending to be another player
+      if (socket.id === playersInfo[input.playerId].socketId) {
+        clientInputsQueue.push(input);
+      }
+    }
   });
 });
 
-var lastSentUpdateInput = 0,
-    lastProcessedInput = 0,
-    currentWorldState = 0;
+var currentWorldState = 0;
 
 setInterval(function () {
   var input;
@@ -49,7 +58,7 @@ setInterval(function () {
       game.applyInput(input.playerId, input);
       game.update();
 
-      lastProcessedInput = input.inputNumber;
+      playersInfo[input.playerId].lastProcessedInput = input.inputNumber;
     }
 
     clientInputsQueue = [];
@@ -57,18 +66,16 @@ setInterval(function () {
 }, 15);
 
 setInterval(function () {
-  var worldState;
+  var worldState = game.getWorldState();
+  worldState.number = currentWorldState++;
+  worldState.t = Date.now();
 
-  if (lastSentUpdateInput < lastProcessedInput) {
-    worldState = game.getWorldState();
-    worldState.number = currentWorldState++;
-    worldState.lastInput = lastProcessedInput;
-    worldState.t = Date.now();
+  for (playerId in playersInfo) {
+    var socketId = playersInfo[playerId].socketId;
 
-    io.sockets.volatile.emit('world-update', worldState);
-
-    lastSentUpdateInput = worldState.lastInput;
+    worldState.lastInput = playersInfo[playerId].lastProcessedInput;
+    io.sockets.socket(socketId).emit('world-update', worldState);
   }
-}, 1000 / 20);
+}, 1000 / 2);
 
 console.log("Server listening on port " + port);
