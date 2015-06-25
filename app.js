@@ -74,8 +74,8 @@ setInterval(function () {
     var socketId = playersInfo[playerId].socketId;
 
     worldState.lastInput = playersInfo[playerId].lastProcessedInput;
-    io.sockets.socket(socketId).emit('world-update', worldState);
+    io.sockets.connected[socketId].emit('world-update', worldState);
   }
-}, 1000 / 2);
+}, 1000 / 10);
 
 console.log("Server listening on port " + port);
